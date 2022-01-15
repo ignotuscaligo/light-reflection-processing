@@ -3,8 +3,9 @@ LinearFalloffFunctionSet linearFalloffFunctionSet = new LinearFalloffFunctionSet
 EvenDiffuseFunctionSet evenDiffuseFunctionSet = new EvenDiffuseFunctionSet();
 DiffuseFunctionSet diffuseFunctionSet = new DiffuseFunctionSet();
 BlendFunctionSet blendFunctionSet = new BlendFunctionSet(diffuseFunctionSet, linearFalloffFunctionSet);
+DiffuseSpecularFalloffFunctionSet diffuseSpecularFalloffFunctionSet = new DiffuseSpecularFalloffFunctionSet();
 
-FunctionSet functionSet = linearFalloffFunctionSet;
+FunctionSet functionSet = diffuseSpecularFalloffFunctionSet;
 
 Chart intensityDistributionChart = new Chart();
 Chart intensityIntegralChart = new Chart();
@@ -65,7 +66,7 @@ void setup()
 void draw()
 {
     functionSet.setInputAngle(sin(((frameCount % 1440) / 1440.0) * 2 * PI) * 60);
-    functionSet.setKnee(((sin(((frameCount % 240) / 240.0) * 2 * PI) + 1.0) / 2.0) * 60);
+    functionSet.setKnee(0.001 + ((sin(((frameCount % 240) / 240.0) * 2 * PI) + 1.0) / 2.0) * 60);
     //functionSet.setKnee(10);
 
     blendFunctionSet.setBlend((cos(((frameCount % 2880) / 2880.0) * 2 * PI) + 1.0) / 2.0);

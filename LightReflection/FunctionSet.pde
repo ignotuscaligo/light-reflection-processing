@@ -234,3 +234,80 @@ class BlendFunctionSet extends FunctionSet
         );
     }
 }
+
+class DiffuseSpecularFalloffFunctionSet extends FunctionSet
+{
+    public float diffuseStrength = 0.0;
+    public float specularStrength = 1.0;
+
+    protected float peakValue = 0.0;
+
+    DiffuseSpecularFalloffFunctionSet()
+    {
+        super();
+        updateValues();
+    }
+
+    public void setDiffuseStrength(float value)
+    {
+        diffuseStrength = min(max(0.0, value), 1.0);
+        updateValues();
+    }
+
+    public void setSpecularStrength(float value)
+    {
+        specularStrength = min(max(0.0, value), 1.0);
+        updateValues();
+    }
+
+    private void updateValues()
+    {
+        peakValue = diffuseStrength + specularStrength;
+    }
+
+    // Given -90 to 90 degrees, returns the relative intensity
+    public float intensityDistribution(float angle)
+    {
+        // specular start = inputAngle - knee
+        // specular end = inputAngle + knee
+        // angle = 30
+        // input angle = 45
+        // knee = 10
+        // distance = (30 - 45) + 10 = -5
+        // position = clamp(0, distance, knee * 2) = clamp(0, -5, 20) = 0
+        // angle = 50
+        // input angle = 45
+        // knee = 10
+        // distance = (50 - 45) + 10 = 15
+        // position = clamp(0, distance, knee * 2) = clamp(0, 15, 20) = 15
+        float distance = angle - inputAngle;
+        float offsetDistance = distance + knee;
+        float clampedDistance = min(max(0.0, offsetDistance), angleRange);
+        float position = clampedDistance / angleRange;
+        float specular = sin(position * PI) * specularStrength;
+        return (diffuseStrength + specular) / peakValue;
+    }
+
+    // Integral of the intensity distribution, returns -90 to 90 degrees
+    // Represents an inverse measure of how often a given angle would be selected
+    public float intensityIntegral(float input)
+    {
+        float angle = -90.0 + (input * 180.0);
+        float distance = angle - inputAngle;
+        float offsetDistance = distance + knee;
+        float clampedDistance = min(max(0.0, offsetDistance), angleRange);
+        float position = clampedDistance / angleRange;
+        float specularIntegral = cos(position * PI) * specularStrength;
+        float diffuseIntegral = (-90 + (180 * input)) * diffuseStrength;
+        return (diffuseIntegral + specularIntegral) / peakValue;
+    }
+
+    // Above integral solved for the input, then remapped to -90 to 90 degrees
+    // Represents the probability distribution of a given angle being selected
+    // Given a random number between 0 and 1, the distribution of values should match
+    // the intensityDistribution.
+    public float probabilityDistribution(float input)
+    {
+        return 0.0;
+    }
+}
