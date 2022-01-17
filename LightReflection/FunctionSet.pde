@@ -34,6 +34,12 @@ class FunctionSet
     {
         return 0.0;
     }
+    
+    // Given -90 to 90 degrees, return the integral of intensity
+    public float trueIntegral(float input)
+    {
+        return 0.0;
+    }
 
     // Integral of the intensity distribution, returns -90 to 90 degrees
     // Represents an inverse measure of how often a given angle would be selected
@@ -285,7 +291,83 @@ class DiffuseSpecularFalloffFunctionSet extends FunctionSet
         float clampedDistance = min(max(0.0, offsetDistance), angleRange);
         float position = clampedDistance / angleRange;
         float specular = sin(position * PI) * specularStrength;
-        return (diffuseStrength + specular) / peakValue;
+        return (diffuseStrength + specular);
+    }
+    
+    // Given -90 to 90 degrees, return the integral of intensity
+    public float trueIntegral(float input)
+    {
+        float normalizedPosition = (input + 90.0) / 180.0;
+        float diffuseIntegral = normalizedPosition * diffuseStrength;
+        float peakDiffuseIntegral = diffuseStrength;
+        
+        
+        // d = i - I
+        // o = d + k
+        // p = o / 2k
+        // s = sin(p * PI) * S
+        // s = sin(x * PI) * y
+        
+        // si = -((y * cos(x * PI)) / PI)
+        // si = -((S * cos(p * PI)) / PI)
+        // si = -((specularStrength * cos(position * PI)) / PI)
+        
+        
+        
+        float distance = input - inputAngle;
+        float offsetDistance = distance + knee;
+        float clampedDistance = min(max(0.0, offsetDistance), angleRange);
+        float position = clampedDistance / angleRange;
+        //float specularIntegral = (-((specularStrength * (cos(position * PI) - 1.0)) / PI)) * (knee / 90.0);
+        //float peakSpecularIntegral = (-((specularStrength * -2.0) / PI)) * (knee / 90.0);
+        
+        
+        
+        // ((-((specularStrength * (cos(position * PI) - 1.0)) / PI)) * (knee / 90.0)) / ((-((specularStrength * -2.0) / PI)) * (knee / 90.0))
+        // ((-((S * (cos(p * PI) - 1.0)) / PI)) * (k / 90.0)) / ((-((S * -2.0) / PI)) * (k / 90.0))
+        // ni = ((-((z * (cos(x * PI) - 1.0)) / PI)) * (y / 90.0)) / ((-((z * -2.0) / PI)) * (y / 90.0))
+        // ni = ((-((z * (cos(x * PI) - 1.0)) / PI))) / ((-((z * -2.0) / PI)))
+        // ni = ((-((z * (cos(x * PI) - 1.0))))) / ((-((z * -2.0))))
+        // ni = -((z * (cos(x * PI) - 1.0))) / -((z * -2.0))
+        // ni = -(((cos(x * PI) - 1.0))) / -((-2.0))
+        // ni = -(cos(x * PI) - 1.0) / -(-2.0)
+        // ni = -(cos(x * PI) - 1.0) / 2.0
+        // ni = -0.5 * (cos(x * PI) - 1.0)
+        
+        
+        // x = 0.5
+        // y = 30.0
+        // z = 1.0
+        // ni = ((-((z * (cos(x * PI) - 1.0)) / PI)) * (y / 90.0)) / ((-((z * -2.0) / PI)) * (y / 90.0))
+        // ni = ((-((1.0 * (cos(0.5 * PI) - 1.0)) / PI)) * (30.0 / 90.0)) / ((-((1.0 * -2.0) / PI)) * (30.0 / 90.0))
+        // ni = ((-((1.0 * (0.0 - 1.0)) / PI)) * (30.0 / 90.0)) / ((-((1.0 * -2.0) / PI)) * (30.0 / 90.0))
+        // ni = ((-((1.0 * (-1.0)) / PI)) * (30.0 / 90.0)) / ((-((1.0 * -2.0) / PI)) * (30.0 / 90.0))
+        // ni = ((-((1.0 * (-1.0)) / PI)) * (30.0 / 90.0)) / ((-((-2.0) / PI)) * (30.0 / 90.0))
+        // ni = ((-((1.0 * (-1.0)) / PI)) * (30.0 / 90.0)) / ((-(-0.6366)) * (30.0 / 90.0))
+        // ni = ((-((1.0 * (-1.0)) / PI)) * (0.3333)) / ((-(-0.6366)) * (0.3333))
+        // ni = ((-((1.0 * (-1.0)) / PI)) * (0.3333)) / ((0.6366) * (0.3333))
+        // ni = ((-((1.0 * (-1.0)) / PI)) * (0.3333)) / (0.2121)
+        // ni = ((-((-1.0) / PI)) * (0.3333)) / (0.2121)
+        // ni = ((-(-0.3183)) * (0.3333)) / (0.2121)
+        // ni = ((0.3183) * (0.3333)) / (0.2121)
+        // ni = (0.1060) / (0.2121)
+        // ni = 0.4997
+        
+        // x = 0.5
+        // y = 30.0
+        // z = 1.0
+        // ni = -0.5 * (cos(x * PI) - 1.0)
+        // ni = -0.5 * (cos(0.5 * PI) - 1.0)
+        // ni = -0.5 * (0.0 - 1.0)
+        // ni = -0.5 * -1.0
+        // ni = 0.5
+        
+        //float peakIntegral = peakDiffuseIntegral + peakSpecularIntegral;
+        //return (diffuseIntegral + specularIntegral) / peakIntegral;
+        
+        float normalizedSpecularIntegral = (-0.5 * (cos(position * PI) - 1.0)) * (knee / 90.0) * specularStrength;
+        
+        return (diffuseIntegral + normalizedSpecularIntegral) / (diffuseStrength + ((knee / 90.0) * specularStrength));
     }
 
     // Integral of the intensity distribution, returns -90 to 90 degrees

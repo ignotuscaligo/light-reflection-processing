@@ -47,11 +47,11 @@ void setup()
     intensityIntegralChart.position.x = 20;
     intensityIntegralChart.position.y = 20 + 400;
     intensityIntegralChart.size = chartSize.copy();
-    intensityIntegralChart.minimum.x = 0.0;
-    intensityIntegralChart.maximum.x = 1.0;
-    intensityIntegralChart.minimum.y = -90.0;
-    intensityIntegralChart.maximum.y = 90.0;
-    intensityIntegralChart.function = new IntensityIntegralRef(functionSet);
+    intensityIntegralChart.minimum.x = -90.0;
+    intensityIntegralChart.maximum.x = 90.0;
+    intensityIntegralChart.minimum.y = 0.0;
+    intensityIntegralChart.maximum.y = 1.0;
+    intensityIntegralChart.function = new TrueIntegralRef(functionSet);
 
     probabilityDistributionChart.position.x = 20;
     probabilityDistributionChart.position.y = 20 + 600;
@@ -70,6 +70,9 @@ void draw()
     //functionSet.setKnee(10);
 
     blendFunctionSet.setBlend((cos(((frameCount % 2880) / 2880.0) * 2 * PI) + 1.0) / 2.0);
+
+    diffuseSpecularFalloffFunctionSet.setSpecularStrength(0.5);
+    diffuseSpecularFalloffFunctionSet.setDiffuseStrength((cos(((frameCount % 2880) / 2880.0) * 2 * PI) + 1.0) / 4.0);
 
     background(0);
     strokeWeight(2);

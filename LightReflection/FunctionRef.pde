@@ -39,6 +39,19 @@ class IntensityIntegralRef extends FunctionRef
     }
 }
 
+class TrueIntegralRef extends FunctionRef
+{
+    TrueIntegralRef(FunctionSet functionSet)
+    {
+        super(functionSet);
+    }
+
+    public float call(float input)
+    {
+        return functionSet.trueIntegral(input);
+    }
+}
+
 class ProbabilityDistributionRef extends FunctionRef
 {
     ProbabilityDistributionRef(FunctionSet functionSet)
