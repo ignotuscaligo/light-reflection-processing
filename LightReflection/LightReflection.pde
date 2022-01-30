@@ -71,8 +71,10 @@ void draw()
 
     blendFunctionSet.setBlend((cos(((frameCount % 2880) / 2880.0) * 2 * PI) + 1.0) / 2.0);
 
-    diffuseSpecularFalloffFunctionSet.setSpecularStrength(0.5);
-    diffuseSpecularFalloffFunctionSet.setDiffuseStrength((cos(((frameCount % 2880) / 2880.0) * 2 * PI) + 1.0) / 4.0);
+    diffuseSpecularFalloffFunctionSet.setSpecularStrength(1.0);
+    diffuseSpecularFalloffFunctionSet.setDiffuseStrength(1.0);
+    //diffuseSpecularFalloffFunctionSet.setSigma(0.2 + ((cos(((frameCount % 2880) / 2880.0) * 2 * PI) + 1.0) / 2.0) * 0.8);
+    diffuseSpecularFalloffFunctionSet.setSigma(0.2);
 
     background(0);
     strokeWeight(2);
