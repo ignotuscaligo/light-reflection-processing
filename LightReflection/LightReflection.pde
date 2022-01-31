@@ -7,10 +7,10 @@ DiffuseSpecularFalloffFunctionSet diffuseSpecularFalloffFunctionSet = new Diffus
 
 FunctionSet functionSet = diffuseSpecularFalloffFunctionSet;
 
+Chart polarDistributionChart = new Chart();
 Chart intensityDistributionChart = new Chart();
 Chart intensityIntegralChart = new Chart();
 Chart probabilityDistributionChart = new Chart();
-Chart polarDistributionChart = new Chart();
 
 int[] counts = new int[180];
 int chartCount = 4;
@@ -143,8 +143,8 @@ void draw()
     line(cartesianIncidentX, cartesianBaseY, cartesianIncidentX, cartesianTopY);
     line(polarBaseX, polarBaseY, polarIncidentX, polarIncidentY);
 
+    polarDistributionChart.draw();
     intensityDistributionChart.draw();
     intensityIntegralChart.draw();
     probabilityDistributionChart.draw();
-    polarDistributionChart.draw();
 }
