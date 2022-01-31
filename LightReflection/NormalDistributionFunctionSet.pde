@@ -1,4 +1,4 @@
-class DiffuseSpecularFalloffFunctionSet extends FunctionSet
+class NormalDistributionFunctionSet extends FunctionSet
 {
     public float diffuseStrength = 0.0;
     public float specularStrength = 1.0;
@@ -9,7 +9,7 @@ class DiffuseSpecularFalloffFunctionSet extends FunctionSet
     private float mu = 0.0;
     private float combinedStrength = 0.0;
 
-    DiffuseSpecularFalloffFunctionSet()
+    NormalDistributionFunctionSet()
     {
         super();
         updateValues();
