@@ -3,9 +3,10 @@ LinearFalloffFunctionSet linearFalloffFunctionSet = new LinearFalloffFunctionSet
 EvenDiffuseFunctionSet evenDiffuseFunctionSet = new EvenDiffuseFunctionSet();
 DiffuseFunctionSet diffuseFunctionSet = new DiffuseFunctionSet();
 BlendFunctionSet blendFunctionSet = new BlendFunctionSet(diffuseFunctionSet, linearFalloffFunctionSet);
-DiffuseSpecularFalloffFunctionSet diffuseSpecularFalloffFunctionSet = new DiffuseSpecularFalloffFunctionSet();
+NormalDistributionFunctionSet normalDistributionFunctionSet = new NormalDistributionFunctionSet();
+CauchyDistributionFunctionSet cauchyDistributionFunctionSet = new CauchyDistributionFunctionSet();
 
-FunctionSet functionSet = diffuseSpecularFalloffFunctionSet;
+FunctionSet functionSet = cauchyDistributionFunctionSet;
 
 Chart polarDistributionChart = new Chart();
 Chart intensityDistributionChart = new Chart();
@@ -71,10 +72,10 @@ void draw()
 
     blendFunctionSet.setBlend((cos(((frameCount % 2880) / 2880.0) * 2 * PI) + 1.0) / 2.0);
 
-    diffuseSpecularFalloffFunctionSet.setSpecularStrength(1.0);
-    diffuseSpecularFalloffFunctionSet.setDiffuseStrength(1.0);
-    //diffuseSpecularFalloffFunctionSet.setSigma(0.2 + ((cos(((frameCount % 2880) / 2880.0) * 2 * PI) + 1.0) / 2.0) * 0.8);
-    diffuseSpecularFalloffFunctionSet.setSigma(0.2);
+    cauchyDistributionFunctionSet.setSpecularStrength(1.0);
+    cauchyDistributionFunctionSet.setDiffuseStrength(1.0);
+    //cauchyDistributionFunctionSet.setSigma(0.2 + ((cos(((frameCount % 2880) / 2880.0) * 2 * PI) + 1.0) / 2.0) * 0.8);
+    cauchyDistributionFunctionSet.setSigma(0.2);
 
     background(0);
     strokeWeight(2);
