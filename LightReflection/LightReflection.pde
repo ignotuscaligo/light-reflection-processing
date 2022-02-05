@@ -72,10 +72,11 @@ void draw()
 
     blendFunctionSet.setBlend((cos(((frameCount % 2880) / 2880.0) * 2 * PI) + 1.0) / 2.0);
 
-    cauchyDistributionFunctionSet.setSpecularStrength(1.0);
-    cauchyDistributionFunctionSet.setDiffuseStrength(1.0);
-    //cauchyDistributionFunctionSet.setSigma(0.2 + ((cos(((frameCount % 2880) / 2880.0) * 2 * PI) + 1.0) / 2.0) * 0.8);
-    cauchyDistributionFunctionSet.setSigma(0.2);
+    float sigmaTime = (frameCount % 2880) / 2880.0;
+    float sigmaPosition = (cos(sigmaTime * 2 * PI) + 1.0) / 2.0;
+
+    cauchyDistributionFunctionSet.setSigma(0.01 + sigmaPosition * 1.99);
+    // cauchyDistributionFunctionSet.setSigma(0.2);
 
     background(0);
     strokeWeight(2);
