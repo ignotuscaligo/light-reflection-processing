@@ -68,12 +68,6 @@ public class CauchyDistributionFunctionSet extends FunctionSet
         return (cauchyIntegral(angle, mu) - integralMin) / integralRange;
     }
 
-    private float cauchyInverseIntegral(float input)
-    {
-        float inverseIntegral = sigma * tan(input * PI) + mu;
-        return -90.0 + (inverseIntegral * 180.0);
-    }
-
     // Above integral solved for the input, then remapped to -90 to 90 degrees
     // Represents the probability distribution of a given angle being selected
     // Given a random number between 0 and 1, the distribution of values should match
